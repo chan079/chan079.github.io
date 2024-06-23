@@ -1,0 +1,133 @@
+0.7.2 (2013-01-21)
+- Bug fix. Many thanks to the person who reported the bug and
+  suggested a patch. See the following email. I just applied the
+  patch and changed the version number.
+
+--- email begins here ---
+Date: Fri, 14 Sep 2012 17:20:18 +0200
+From: Bugs Beastie <bugsbeastie@gmail.com>
+Subject:  [PATCH] fig2pstricks text.c bugfix
+
+Hello!
+
+Not sure you are still maintaining this piece of code...
+
+Nevertheless I have found a bug in a text handling code.
+The problem manifests itself if there are text symbols with a code > 127
+in a .fig file. The assignment (integer) n = (signed char) *p at lines
+43 and 47 in text.c will result in a negative n and lead to the out-of-bound
+access at line 141 in text.c
+The attached patch is a quick band-aid, it is better to check the whole
+code for such errors and you know the code much better than me...
+
+Thanks for the nice converter anyway!
+
+Attached: patch-fig2pstricks_text_c.txt
+--- email ends here ---
+
+- Change fprintf(fp,string) to fprintf(fp,"%s",string) to avoid
+  compile-time warning on OS X.
+
+0.7.1 (2009-02-18)
+- Version number is fixed.
+- Add "-12" and "-11" options, which insert "12pt" and "11pt"
+  respectively to the document option.
+- Add 'configure' which does nothing.
+- Add 'make install' and 'make uninstall' to install the executables
+  in /usr/local/bin.
+  'make DESTDIR=/usr install' works. But 'DESTDIR=/usr make install'
+  does not.
+- fig2epspdf is a bit cleaned up.
+- Prebuilt MSDOS binary is not provided anymore.
+  You can build yours using MinGW.
+  Install MinGW and compile it: 
+    PATH_TO_MINGW\bin\gcc -o fig2pstricks.exe *.c
+  in the source directory.
+  For example, I installed MinGW in my wine system and ran
+    wine c:/mingw/bin/gcc -o fig2pstricks.exe *.c
+  and fig2pstricks.exe was built.
+
+0.7.0 (2009-02-15)
+- A bug regarding wrong vertical alignment of text was fixed 
+  ('[B]' option added).
+  See revised test/text.fig to test it and the new test/legend.fig
+- fig2epspdf script was added
+- MSDOS binary compiled by Wine+MinGW
+
+0.6.9 (2007-08-07)
+- Add --empty option. This adds \thispagestyle{empty} at the end of
+  the output if the "-c" option is used. This additional output is 
+  commented out (by %%) when "-c" is not used.
+- Change fopen mode from "r" to "rb" for compatibility with MSDOS
+  MSDOS binary compiled by MinGW32
+
+0.6.8 (2005-09-14)
+Thanks to Tim Gollnik and his xfig file,
+some major bugs were found and fixed.
+- The depth of a 'compound' object is now better handled (but not
+  perfect yet).
+- Text are better handled. A new commandline option --latex-symbols
+  is introduced.  If fig2pstricks is called with --latex-symbols,
+  then texts are translated into latex symbols. Default is that
+  the texts are copied verbatim so that any latex commands are
+  nicely copied to pstricks. But if unusual characters (such as #, %,
+  etc) are included in the xfig file, then the resulting latex file
+  obtained without the "--latex-symbols" option would not compile.
+- ASCII code 128-255 are (almost) perfectly handled (e.g., umlauts,
+  etc). Try with test/crazytexts.fig with and without --latex-symbols.
+- I do not yet understand what is going on with the "free" function
+  in sort_by_depth() in node.c.
+
+0.6.7 (2005-08-22)
+- A minor bug fixed (?)
+  Line 3 from the bottom of sort_by_depth function in node.c
+  causes a trouble.
+  So I simply commented it out, but I don't know what is happening.
+  It used to be okay, but suddenly it doesn't work.
+
+0.6.6 (2005-01-29)
+- -p option added: "padding" (experimental)
+- Bugfix: Segmentation fault when color=-1 (default color)
+  Thanks to Matti Ristinmaa who pointed it out.
+- Bugfix: Overlay was incorrectly set previously.
+- Improvement: Symbol font supported (perhaps imperfect?)
+  Thanks to Matti Ristinmaa for the fig file to work with.
+- Other small bugs fixed.
+- --debug option added. Not really useful, though.
+- MS-DOS version compiled by mingw32:
+    .../cross-tools/bin/i386-mingw32msvc-gcc -c *.c
+    .../cross-tools/bin/i386-mingw32msvc-gcc -o fig2pstricks.exe *.o
+  I tested with
+    wine ./fig2pstricks.exe test.fig
+  and it worked.
+
+0.6.5 (2004-05-03): Not released
+- Bug fix: dotscale is set for every "\psdot"
+
+0.6.4 (2004-04-07)
+- Do not include <libgen.h> and correspondingly remove 'basename'
+  from fig2pstricks.c so that it is compiled in MS-DOS with no warnings.
+- Remove unused functions from source.
+- MS-DOS version compiled by DJGPP.
+
+0.6.3 (2004-03-22)
+- Bug fix: In color.c, correct \newgraycolor{...} to \newgray{...}
+- Bug fix: In text.c, "\\001" is now correctly handled
+  (hopefully). Only "\001" is regarded as the end of string.
+- MS-DOS version compiled using DJGPP
+
+0.6.2 (2004-02-24)
+- Bug fix: Special characters (eg. \, &, etc) are correctly 
+  converted now.
+  Note: Special characters are literally converted. For example, '&'
+  is converted to '&', NOT to '\&'.
+
+0.6.1 (2004-02-17)
+- Fix a minor bug of failing to inputting color package in prosper mode.
+
+0.6   (2004-01-24)
+- Initial release
+
+Known bugs
+----------
+- linecolor and dotscale properties are not updated correctly.
