@@ -1,1 +1,1 @@
-Go to [Homepage](https://chan079.github.io/).
+Link to [Homepage](https://chan079.github.io/)
